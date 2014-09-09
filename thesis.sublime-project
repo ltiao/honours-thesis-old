@@ -1,0 +1,16 @@
+{
+	"folders":
+	[
+		{
+			"path": "/Users/tiao/Dropbox/UNSW/honours-thesis",
+			"file_include_patterns": [
+				"*.tex", 
+				"*.bib", 
+				"*.md", 
+				"*.sublime-project", 
+				"LICENSE",
+				".gitignore"
+			]
+		}
+	]
+}
