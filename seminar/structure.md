@@ -23,6 +23,11 @@
         - Comparison
     * Related work
         Methods in the literature include
+
+        Existing body of work is dominated by methods involving \textit{texture synthesis} - 
+filling holes with repetitive two-dimensional textural patterns. 
+
+
         - structural inpainting
         - texture inpainting
         - combination

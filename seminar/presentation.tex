@@ -143,7 +143,7 @@ Kernel convolution typically requires pixel values from outside the image bounda
 \end{figure}
 \end{columns}
 
-Make \textbf{local} approximations to extend the image in a visually plausible manner.
+Make \alert{local} approximations to extend the image in a visually plausible manner.
 
 \end{frame}
 
@@ -156,22 +156,21 @@ Make \textbf{local} approximations to extend the image in a visually plausible m
 Reconstructing lost or deteriorated parts of digital images; removing objects from 
 digital images and refilling it in a visually plausible manner.
 
-Existing body of work is dominated by methods involving \textit{texture synthesis} - 
-filling holes with repetitive two-dimensional textural patterns. 
-
 \begin{columns}[c] % The "c" option specifies centered vertical alignment while the "t" option is used for top vertical alignment
 \column{.45\textwidth} % Left column and width
+Some applications include
 \begin{enumerate}
-	\item Extend \note{nearest border pixels are extended as far as necessary}
-	\item Wrap \note{values are taken from opposite corner}
-	\item Crop \note{pixels requiring values from beyond the edge are skipped}
-	\item \textbf{Approximate} 
+	\item Red-eye/blemish removal
+	\item Object/text removal
+	\item Art/image restoration
 \end{enumerate}
 \column{.5\textwidth} % Right column and width
 \begin{figure} %[!ht]
-\caption{Border handling: extend}
 \centering
-	\includegraphics[width=0.3\columnwidth]{../figures/Extend_Edge-Handling}
+	\includegraphics[width=0.45\columnwidth]{../figures/researchmicros-000.jpg}
+	\hfill
+	\includegraphics[width=0.45\columnwidth]{../figures/researchmicros-001.jpg}
+\caption{Removing large objects from images}
 \end{figure}
 \end{columns}
 
@@ -180,33 +179,46 @@ filling holes with repetitive two-dimensional textural patterns.
 %------------------------------------------------
 
 \begin{frame}
-\frametitle{Image Processing Applications}
+\frametitle{Problems in Image Processing}
 \framesubtitle{Digital image inpainting}
 
-Reconstructing lost or deteriorated parts of digital images; removing objects from 
-digital images and refilling it in a visually plausible manner.
-
-Existing body of work is dominated by methods involving \textit{texture synthesis} - 
-filling holes with repetitive two-dimensional textural patterns. 
+Traditionally, inpainting has been done manually by professional conservator-restorers. The methodology is roughly
 
 \begin{columns}[c] % The "c" option specifies centered vertical alignment while the "t" option is used for top vertical alignment
-\column{.45\textwidth} % Left column and width
+\column{.55\textwidth} % Left column and width
 \begin{enumerate}
-	\item Extend \note{nearest border pixels are extended as far as necessary}
-	\item Wrap \note{values are taken from opposite corner}
-	\item Crop \note{pixels requiring values from beyond the edge are skipped}
-	\item \textbf{Approximate} 
+	\item Global image determines how to fill gap; restore the unity of the work.
+	\item Structural details surrounding the gap (\alert{local} info.) must be
+	 pronlonged into the gap. E.g. countours lines.
+	\item Similar for details in colour and texture.
 \end{enumerate}
-\column{.5\textwidth} % Right column and width
+Current computerized/digital methods try to emulate this process.
+
+\column{.45\textwidth} % Right column and width
 \begin{figure} %[!ht]
-\caption{Border handling: extend}
 \centering
-	\includegraphics[width=0.3\columnwidth]{../figures/Extend_Edge-Handling}
+	\includegraphics[width=\columnwidth]{../figures/fresco.jpg}
+\caption{\textit{Ecce `Mono'}: A failed restoration}
 \end{figure}
 \end{columns}
+
 \end{frame}
 
 %------------------------------------------------
+
+\begin{frame}
+\frametitle{A Signal Processing Problem}
+
+In other words...
+
+\begin{itemize}
+	\item Forecast/predict the missing values and extend/fill the image with our estimation.
+	\item Very unusual signal processing problem - we are interested extremely local signal behaviour. 
+\end{itemize}
+
+\end{frame}
+
+
 
 \begin{frame}
 \frametitle{Fourier series}
@@ -228,7 +240,7 @@ filling holes with repetitive two-dimensional textural patterns.
 \begin{figure} %[!ht]
 \centering
 	\includegraphics[width=\columnwidth]{../figures/fourier}
-\caption{Truncated Fourier expansion with 11 terms (top) and 21 terms (bottom)}
+\caption{Truncated Fourier expansion of orders 11 (top) and 21 (bottom)}
 \end{figure}
 \end{columns}
 \end{frame}
@@ -272,7 +284,7 @@ filling holes with repetitive two-dimensional textural patterns.
 \begin{figure} %[!ht]
 \centering
 	\includegraphics[width=\columnwidth]{../figures/taylor}
-\caption{Truncated Taylor expansion with 11 terms (top) and 21 terms (bottom)}
+\caption{Truncated Taylor expansion of orders 11 (top) and 21 (bottom)}
 \end{figure}
 \end{columns}
 
@@ -288,12 +300,12 @@ filling holes with repetitive two-dimensional textural patterns.
 	\item Truncations of the Whittaker-Shannon interpolation of all 
 		$f \in \mathbf{BL}(\pi)$ has the following properties
 		\begin{itemize}
-			\item belongs to $f \in \mathbf{BL}(\pi)$
-			\item converges uniformly in $L^2$
-			\item if $A$ is a filter, then
-				\begin{equation*}
+			\item belongs to $\mathbf{BL}(\pi)$
+			\item converges to $f$ uniformly and in $L^2$
+			\item if $A$ is a (continuous, linear, time-invariant) filter, then
+				\begin{equation} \label{eqn:filter_prop}
 					A[f](t) = \sum_{n=-\infty}^{\infty} f(n) A[\mathrm{sinc}](t-n)
-				\end{equation*}
+				\end{equation}
 		\end{itemize}
 		In stark contrast, \alert{none of these important properties hold} for
 		truncations of a Taylor series expansion of any $f \in \mathbf{BL}(\pi)$.
@@ -336,13 +348,13 @@ Coef. type  & Integral & \alert{Derivative} \\
 \begin{frame}
 \frametitle{Overview of Chromatic Derivatives}
 \begin{itemize}
-	\item Dr. Aleks Ignjatovic introduced the concept of \textit{Chromatic Derivatives} 
+	\item Dr. Aleks Ignjatovic introduced \textit{Chromatic derivatives} 
 	(c.f. \cite{Ignjatovic2009} for recent publication)
 	\item \textbf{Key Concept:} Instead of $n$th-order derivatives, consider linear 
 	combinations of lower order derivatives
-	\begin{equation}
+	\begin{equation*}
 		\mathcal{D}_t^n \leftarrow P_n(\mathcal{D}_t) = \sum_{k=0}^{n} c_k \mathcal{D}_t^k
-	\end{equation}
+	\end{equation*}
 	where $P_n$ is an \alert{orthogonal polynomial}. E.g.
 	\begin{itemize}
 		\item Legendre polynomyials
@@ -402,6 +414,7 @@ where $\delta_{mn}$ is the Kronecker delta.
 \caption{First 10 Legendre polynomials}
 \end{figure}
 \end{columns}
+\pause
 \begin{example}[First few Legendre polynomials]
 \begin{align*}
 & P_0(x) = 1, & P_2(x) = \frac{1}{2}(3x^2-1), \\
@@ -422,6 +435,7 @@ with respect to $t$ is defined as
 \end{equation}
 where $\mathcal{D}_t$ is the differential operator with respect to $t$ and
 $P_n^L$ are the normalized and scaled Legendre polynomials.
+\pause
 \begin{example}[Derivative vs. chromatic derivative]
 \begin{table}
 \begin{tabular}{l l}
@@ -446,10 +460,10 @@ Chromatic Derivative & $\mathcal{K}_t^3 = \frac{\sqrt{7}}{2\pi} \left ( \frac{5}
 			\mathcal{K}_t^n[e^{i\omega t}] = i^n P_n^L(\omega) e^{i\omega t}
 		\end{equation*}
 	\item So for $f \in \mathbf{BL}(\pi)$, we have
-		\begin{equation*}
+		\begin{equation}
 			\mathcal{K}^n[f](t) = \frac{1}{2\pi} \int_{-\pi}^{\pi} i^n P_n^L(\omega) \hat{f}(\omega) e^{i\omega t} d\omega
-		\end{equation*}
-		by the inverse Fourier transform.
+		\end{equation}
+		% TODO: Why
 \end{itemize}
 \end{frame}
 
@@ -464,164 +478,206 @@ Chromatic Derivative & $\mathcal{K}_t^3 = \frac{\sqrt{7}}{2\pi} \left ( \frac{5}
 			c_n							&= \frac{1}{2\pi} \int_{-\pi}^{\pi} i^n P_n^L(\omega) \hat{f}(\omega) d\omega
 										= \mathcal{K}^n[f](0)
 		\end{align*}
-	\item By taking the inverse Fourier transform on $\omega$, we get
-		\begin{align*}
-			f(t)	&= \sum_{n=0}^{\infty} c_n (-1)^n \mathcal{K}^n[\mathrm{sinc}](t)
-					= \sum_{n=0}^{\infty} c_n \sqrt{2n+1} j_n(\pi t)\\
-			c_n		&= \mathcal{K}^n[f](0)
-		\end{align*}
+	\item By taking the inverse Fourier transform on $\omega$, we get the \textit{chromatic expansion}
+		\begin{equation*}
+			f(t)	= \sum_{n=0}^{\infty} (-1)^n  \mathcal{K}^n[f](0) \mathcal{K}^n[\mathrm{sinc}](t)
+					= \sum_{n=0}^{\infty} \mathcal{K}^n[f](0) \sqrt{2n+1} j_n(\pi t)
+		\end{equation*}
 		where $j_n(t) = \sqrt{\frac{\pi}{2x}}J_{n+1/2}(x)$ is the spherical Bessel function of the first kind.
 \end{itemize}
 \end{frame}
 
-% %------------------------------------------------
-
-% \begin{frame}
-% \frametitle{Table}
-% \begin{table}
-% \begin{tabular}{l p{2cm} p{2cm} p{2cm}}
-% \toprule
-% & \textbf{Taylor expansion} & \textbf{Chromatic expansion} & \textbf{Shannon-Whittaker expansion}\\
-% \midrule
-% Treatment 1 & 0.0003262 & 0.562 & \\
-% Treatment 2 & 0.0015681 & 0.910 & \\
-% Treatment 3 & 0.0009271 & 0.296 & \\
-% \bottomrule
-% \end{tabular}
-% \caption{Table caption}
-% \end{table}
-% \end{frame}
-
 %------------------------------------------------
 
-\subsection{Related work}
-
 \begin{frame}
-\frametitle{Blocks of Highlighted Text}
-\begin{block}{Block 1}
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer lectus nisl, ultricies in feugiat rutrum, porttitor sit amet augue. Aliquam ut tortor mauris. Sed volutpat ante purus, quis accumsan dolor.
+\frametitle{Putting it all together}
+
+\begin{block}{Taylor series expansion}
+\begin{equation*}
+	f(t) = \sum_{n=0}^{\infty} \mathcal{D}^n[f](0) \frac{t^n}{n!}
+\end{equation*}
 \end{block}
 
-\begin{block}{Block 2}
-Pellentesque sed tellus purus. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Vestibulum quis magna at risus dictum tempor eu vitae velit.
+\begin{block}{Chromatic series expansion}
+\begin{equation*}
+	f(t) = \sum_{n=0}^{\infty} \mathcal{K}^n[f](0) \sqrt{2n+1} j_n(\pi t)
+\end{equation*}
 \end{block}
 
-\begin{block}{Block 3}
-Suspendisse tincidunt sagittis gravida. Curabitur condimentum, enim sed venenatis rutrum, ipsum neque consectetur orci, sed blandit justo nisi ac lacus.
+\begin{block}{Shannon-Whittaker interopolation}
+\begin{equation*}
+	f(t) = \sum_{n=-\infty}^{\infty} f(n) \mathrm{sinc}{\pi(t-n)}
+\end{equation*}
 \end{block}
+
 \end{frame}
 
 %------------------------------------------------
 
 \begin{frame}
-\frametitle{Multiple Columns}
-\begin{columns}[c] % The "c" option specifies centered vertical alignment while the "t" option is used for top vertical alignment
+\frametitle{Comparison: approximation}
 
-\column{.45\textwidth} % Left column and width
-\textbf{Heading}
-\begin{enumerate}
-\item Statement
-\item Explanation
-\item Example
-\end{enumerate}
-
-\column{.5\textwidth} % Right column and width
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer lectus nisl, ultricies in feugiat rutrum, porttitor sit amet augue. Aliquam ut tortor mauris. Sed volutpat ante purus, quis accumsan dolor.
-
-\end{columns}
-\end{frame}
-
-\begin{frame}
-\frametitle{Table}
-\begin{table}
-\begin{tabular}{l l l}
-\toprule
-\textbf{Treatments} & \textbf{Response 1} & \textbf{Response 2}\\
-\midrule
-Treatment 1 & 0.0003262 & 0.562 \\
-Treatment 2 & 0.0015681 & 0.910 \\
-Treatment 3 & 0.0009271 & 0.296 \\
-\bottomrule
-\end{tabular}
-\caption{Table caption}
-\end{table}
-\end{frame}
-
-%------------------------------------------------
-
-\begin{frame}
-\frametitle{Theorem}
-\begin{theorem}[Mass--energy equivalence]
-$E = mc^2$
-\end{theorem}
-\end{frame}
-
-
-\begin{frame}
-\frametitle{Plot}
 \begin{figure} %[!ht]
 \centering
-	\includegraphics[width=0.8\columnwidth]{../figures/sin_exp_plot.pdf}
+	\includegraphics[width=0.8\columnwidth]{../figures/approx}
+\caption{\textcolor{red}{red:} original signal; 
+\textcolor{blue}{red:} chromatic approx. of order 15;
+\textcolor{green}{green:} Taylor approx. of order 15}
 \end{figure}
-\end{frame}
 
+\end{frame}
 
 %------------------------------------------------
 
-\begin{frame}[fragile] % Need to use the fragile option when verbatim is used in the slide
-\frametitle{Verbatim}
-\begin{example}[Theorem Slide Code]
-\begin{verbatim}
 \begin{frame}
-\frametitle{Theorem}
-\begin{theorem}[Mass--energy equivalence]
-$E = mc^2$
-\end{theorem}
-\end{frame}\end{verbatim}
-\end{example}
+\frametitle{Comparison of the Expansions}
+
+\begin{table}
+\begin{tabular}{c c c p{2cm}}
+\toprule
+\textbf{Expansion} & Taylor & Chromatic & Whittaker-Shannon\\
+\midrule
+Local approx. & Best & Good & Poor \\
+Global approx. & Poor & Good & Best \\
+Uniform convergence & No & Yes & Yes \\
+Band-limited & No & Yes & Yes \\
+Noise tolerance & Low & High & - \\
+Filter prop. (\ref{eqn:filter_prop}) & No & Yes & Yes \\
+\bottomrule
+\end{tabular}
+\caption{Summary of the various expansions}
+\end{table}
+
+\textbf{Upshot:} The chromatic expansions possesses the same properties 
+that make the Whittaker-Shannon interpolation essential to signal processing.
+
+% todo uniform convergence in R
+
 \end{frame}
 
 %------------------------------------------------
+
+\begin{frame}
+\frametitle{Back to Image Processing...}
+
+\begin{columns}[c]
+\column{.45\textwidth}
+\begin{itemize}
+	\item Regularization to prevent overfitting
+	\item Linear programming to fit subject to constraints - 
+		continuity across gaps
+\end{itemize}
+\column{.5\textwidth}
+\begin{figure} %[!ht]
+\centering
+	\includegraphics[width=\columnwidth]{../figures/31x16bump.png}
+\caption{Chromatic expansion of a signal in the spatial domain; 
+dots are samples and surface is the expansion}
+\end{figure}
+\end{columns}
+
+\end{frame}
+
+% ------------------------------------------------
+
+\subsection{Previous work}
+
+\begin{frame}
+\frametitle{Digital Image Inpainting}
+\framesubtitle{Conventional methods in previous work}
+
+Previous work in the literature dominated by these methods
+
+\begin{itemize}
+	\item structure inpainting\cite{Bertalmio2000}
+
+	\textit{focus on consistency of the geometric structure}
+
+	\item texture inpainting
+
+	\textit{repetitive two-dimensional synthesized texture patterns}
+
+	\item combination of above\cite{Criminisi2004}
+\end{itemize}
+        
+Must consider these as part of our evaluation framework. \\~
+
+\textit{But focus will be investigating novel techniques involving 
+chromatic approximations.}
+
+\end{frame}
+
+% ------------------------------------------------
 
 \section{Proposal}
 
+\subsection{Project Plan}
+% ------------------------------------------------
+
 \begin{frame}
-\frametitle{Figure}
-Uncomment the code on this slide to include your own image from the same directory as the template .TeX file.
-%\begin{figure}
-%\includegraphics[width=0.8\linewidth]{test}
-%\end{figure}
+\frametitle{Project Plan}
+
+\begin{enumerate}
+	\item Complete literature review/background readings
+	\begin{itemize}
+		\item Familiarization with existing inpainting methods
+			and general image processing techniques
+		\item Papers on chromatic derivatives and preliminaries
+	\end{itemize}
+	\item Establish evaluation framework
+	\begin{itemize}
+		\item Reproduce existing inpainting methods to serve as baseline  
+	\end{itemize}
+	\item Devise methods for inpainting based on chromatic expansions
+	\begin{itemize}
+		\item Regularized least squares 
+		\item Linear programming 
+	\end{itemize}
+	\item Implement
+	\item Experiment/Benchmark
+	\item Analyse results, identify potential improvements and repeat from 4
+\end{enumerate}
+
+
 \end{frame}
+% ------------------------------------------------
 
-%------------------------------------------------
+\section{Conclusion}
+% ------------------------------------------------
 
-\begin{frame}[fragile] % Need to use the fragile option when verbatim is used in the slide
-\frametitle{Citation}
-An example of the \verb|\cite| command to cite within the presentation:\\~
+\begin{frame}
+\frametitle{Summary}
 
-This statement requires citation \cite{Ignjatovic2009}.
+In this talk, we
+
+\begin{itemize}
+	\item saw some interesting problems in image processing - image inpainting 
+		- which require local signal behaviour
+	\item motivated chromatic derivatives by examining the shortcomings 
+		of Taylor series expansions
+	\item examined chromatic derivatives in some detail
+	\item discussed how to use it to tackle related image processing problems
+		and a plan to carry out this project
+\end{itemize}
+
+\pause
+
+\begin{center}
+\Large Thank you
+\end{center}
+
 \end{frame}
-
-%------------------------------------------------
-
-\section{Summary}
+% ------------------------------------------------
 
 \subsection{Bibliography}
-
-\begin{frame}[allowframebreaks]
-Portions of this talk are derived from previous talks given by \cite{Ignjatovic2011,Liu2011}.
-\end{frame}
+% ------------------------------------------------
 
 \begin{frame}[allowframebreaks]
 	\frametitle{References}
+	Portions of this talk are derived from previous talks given by \cite{Ignjatovic2011,Liu2011}.
+
 	\bibliographystyle{plain}
 	\bibliography{../bibliography}
-\end{frame}
-
-%------------------------------------------------
-
-\begin{frame}
-\Huge{\centerline{The End}}
 \end{frame}
 
 %----------------------------------------------------------------------------------------
