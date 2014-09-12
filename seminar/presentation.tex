@@ -153,7 +153,7 @@ Make \alert{local} approximations to extend the image in a visually plausible ma
 \frametitle{Problems in Image Processing}
 \framesubtitle{Digital image inpainting}
 
-Reconstructing lost or deteriorated parts of digital images; removing objects from 
+\textbf{Inpainting:} Reconstructing lost or deteriorated parts of digital images; removing objects from 
 digital images and refilling it in a visually plausible manner.
 
 \begin{columns}[c] % The "c" option specifies centered vertical alignment while the "t" option is used for top vertical alignment
@@ -327,7 +327,7 @@ Approx. & Global & \textcolor{blue}{Local} \\
 Basis			& $e^{i \frac{\pi n}{T} t}$ & $\frac{(t-t_0)^n}{n!}$ \\
 Basis type 		 & Sinusoids & Monomials \\
 Basis Orthog.& \textcolor{blue}{Yes} & \alert{No} \\
-Coefficient & $\frac{1}{2L} \int_{-L}^{L} f(t) e^{-i \frac{\pi n}{L} t} dt$ & $\mathcal{D}^n[f](t_0)$ \\
+Coefficient & $\frac{1}{2L} \int_{-L}^{L} f(t) e^{-i \frac{\pi n}{L} t} dt$ & $\frac{d^n}{dt^n}f(t)|_{t=t_0}$ \\
 Coef. type  & Integral & \alert{Derivative} \\
 \bottomrule
 \end{tabular}
@@ -428,6 +428,7 @@ where $\delta_{mn}$ is the Kronecker delta.
 
 \begin{frame}
 \frametitle{Chromatic Derivatives}
+\framesubtitle{Associated with Legendre Polynomials}
 The chromatic derivatives associated with Legendre polynomials of order $n$ 
 with respect to $t$ is defined as
 \begin{equation}
@@ -454,6 +455,7 @@ Chromatic Derivative & $\mathcal{K}_t^3 = \frac{\sqrt{7}}{2\pi} \left ( \frac{5}
 
 \begin{frame}
 \frametitle{Chromatic Derivatives}
+\framesubtitle{Associated with Legendre Polynomials}
 \begin{itemize}
 	\item We can easily verify that
 		\begin{equation*}
@@ -471,6 +473,7 @@ Chromatic Derivative & $\mathcal{K}_t^3 = \frac{\sqrt{7}}{2\pi} \left ( \frac{5}
 
 \begin{frame}
 \frametitle{Chromatic Derivatives}
+\framesubtitle{Associated with Legendre Polynomials}
 \begin{itemize}
 	\item The Fourier series expansion of $\hat{f}(\omega)$ is given by
 		 \begin{align*}
@@ -504,7 +507,7 @@ Chromatic Derivative & $\mathcal{K}_t^3 = \frac{\sqrt{7}}{2\pi} \left ( \frac{5}
 \end{equation*}
 \end{block}
 
-\begin{block}{Shannon-Whittaker interopolation}
+\begin{block}{Shannon-Whittaker interpolation}
 \begin{equation*}
 	f(t) = \sum_{n=-\infty}^{\infty} f(n) \mathrm{sinc}{\pi(t-n)}
 \end{equation*}
@@ -521,7 +524,7 @@ Chromatic Derivative & $\mathcal{K}_t^3 = \frac{\sqrt{7}}{2\pi} \left ( \frac{5}
 \centering
 	\includegraphics[width=0.8\columnwidth]{../figures/approx}
 \caption{\textcolor{red}{red:} original signal; 
-\textcolor{blue}{red:} chromatic approx. of order 15;
+\textcolor{blue}{blue:} chromatic approx. of order 15;
 \textcolor{green}{green:} Taylor approx. of order 15}
 \end{figure}
 
@@ -538,7 +541,7 @@ Chromatic Derivative & $\mathcal{K}_t^3 = \frac{\sqrt{7}}{2\pi} \left ( \frac{5}
 \textbf{Expansion} & Taylor & Chromatic & Whittaker-Shannon\\
 \midrule
 Local approx. & Best & Good & Poor \\
-Global approx. & Poor & Good & Best \\
+Global approx. & Poor & Good/Okay & Best \\
 Uniform convergence & No & Yes & Yes \\
 Band-limited & No & Yes & Yes \\
 Noise tolerance & Low & High & - \\
@@ -561,12 +564,6 @@ that make the Whittaker-Shannon interpolation essential to signal processing.
 \frametitle{Back to Image Processing...}
 
 \begin{columns}[c]
-\column{.45\textwidth}
-\begin{itemize}
-	\item Regularization to prevent overfitting
-	\item Linear programming to fit subject to constraints - 
-		continuity across gaps
-\end{itemize}
 \column{.5\textwidth}
 \begin{figure} %[!ht]
 \centering
@@ -574,6 +571,12 @@ that make the Whittaker-Shannon interpolation essential to signal processing.
 \caption{Chromatic expansion of a signal in the spatial domain; 
 dots are samples and surface is the expansion}
 \end{figure}
+\column{.45\textwidth}
+\begin{itemize}
+	\item Regularization to prevent overfitting
+	\item Linear programming to fit subject to constraints - 
+		continuity across gaps
+\end{itemize}
 \end{columns}
 
 \end{frame}
@@ -651,13 +654,22 @@ chromatic approximations.}
 In this talk, we
 
 \begin{itemize}
-	\item saw some interesting problems in image processing - image inpainting 
-		- which require local signal behaviour
-	\item motivated chromatic derivatives by examining the shortcomings 
-		of Taylor series expansions
+	\item saw some problems in image processing 
+	\begin{itemize}
+		\item image inpainting
+		\item requires local signal behaviour
+	\end{itemize} 
+	\item motivated chromatic derivatives 
+	\begin{itemize}
+		\item shortcomings of Taylor series expansions
+	\end{itemize} 
 	\item examined chromatic derivatives in some detail
+	\begin{itemize}
+		\item good local approximation power
+		\item properties useful for signal processing 
+	\end{itemize}
 	\item discussed how to use it to tackle related image processing problems
-		and a plan to carry out this project
+	\item outlined a plan to carry out this project
 \end{itemize}
 
 \pause
