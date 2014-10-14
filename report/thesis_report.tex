@@ -16,7 +16,7 @@
 %	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
 %----------------------------------------------------------------------------------------
 
-\documentclass[12pt]{report} % Default font size is 12pt
+\documentclass[12pt]{article} % Default font size is 12pt
 
 \usepackage[utf8]{inputenc}
 
@@ -32,6 +32,11 @@
 \usepackage{amsthm}
 \usepackage{amssymb}
 
+\usepackage{epigraph}
+
+\usepackage[numbers, sort]{natbib}
+\bibliographystyle{plainnat}
+
 \usepackage[nottoc]{tocbibind}
 
 \usepackage{makeidx}
@@ -42,8 +47,9 @@
 %\setlength\parindent{0pt} % Uncomment to remove all indentation from paragraphs
 
 \usepackage{graphicx} % Required for including pictures
-
 \graphicspath{{../figures/}} % Specifies the directory where pictures are stored
+
+\usepackage{epstopdf}
 
 \usepackage{hyperref}
 \hypersetup{
@@ -118,17 +124,98 @@ Dr. Alan \textsc{Blair} % Assessor's Name
 %	INTRODUCTION
 %----------------------------------------------------------------------------------------
 
-\chapter{Introduction} % Major section
-\input{chapters/introduction}
-\chapter{Background}
+\section{Introduction} % Major section
 
-\section{Mathem}
+In \citep{Ignjatovic2009}
+\the \columnwidth
 
-\section{Digital signal processing}
 
-\section{Computer vision and Image processing}
+\subsection{Image processing applications}
 
-\subsubsection{Subsubsection 1} % Sub-sub-section
+\subsubsection{Padding for neighborhood operations}
+
+A linear filter is a type of \emph{neighborhood operator} that uses a weighted 
+combination of the pixel values in the vicinity of a given pixel to determine 
+its final output value~\cite[p.~111]{Szeliski2011}.
+
+Denote $f(i, j)$ the pixel value and let $h(k, l)$ be the \emph{convolution 
+matrix} or \emph{kernel}. The \emph{convolution} between $f$ and $h$ is given by
+\begin{align} \label{eq:linear_filter_convolution}
+	g(i, j) = [f \ast h](i, j) 	&= \sum_k \sum_l f(i-k, j-l) \cdot h(k, l) \\
+								&= \sum_k \sum_l f(k, l) \cdot h(i-k, j-l)  \nonumber
+\end{align}
+
+The linear filter can be used to create a wide range of effects, such as adding 
+soft blurs, sharpening details, accentuating edges, etc.
+
+One obvious problem that arises is that at the border of the image, the 
+convolution operation requires pixel values that are outside the boundaries
+of the image.
+
+Let $\tilde{f}(i, j)$ be the padded pixel values. We can define it as a function 
+of the original pixel values $f(k, l)$ and the dimension (height, width) of the 
+image $(M, N)$.
+
+\begin{align*}
+  \tilde{f}(i, j) &= f(k, l), \\
+  k               &= \max(0, \min(M-1, i)), \\
+  l               &= \max(0, \min(N-1, j)).
+\end{align*}
+
+We would like to approximate $\tilde{f}(i, j)$ \dots
+
+\citet[see][p.~114-115]{Szeliski2011} provides 
+
+\subsubsection{Digital image inpainting}
+
+\newpage
+
+\section{Background}
+
+\subsection{Preliminaries}
+
+\epigraph{In mathematics you don't understand things. You just get used to them.}{John von Neumann}
+
+\subsubsection{Taylor series}
+
+\subsubsection{Orthogonal systems}
+ 
+\subsubsection{Fourier series}
+
+\subsubsection{Legendre Polynomials}
+
+The \emph{Legendre functions} are solutions to the \emph{Legendre differential 
+equation}, which is the second-order ordinary differential equation
+
+\begin{equation} \label{eq:legendre_de}
+\frac{d}{dx}\left[(1-x^2)\frac{d}{dx}P_n(x)\right]+n(n+1)P_n(x)=0
+\end{equation}
+
+The \emph{Legendre polynomials} are also known as \emph{Legendre functions of the 
+first kind}, and are most conveniently defined recursively as follows:
+
+\begin{align*}
+P_0(x) &= 1, P_1(x) = x \\
+P_{n+1}(x) &= \frac{2n+1}{n+1}xP_n(x) - \frac{n}{n+1}P_{n-1}(x)
+\end{align*}
+
+\begin{figure}[H] % Example image
+\center{\includegraphics{legendre_bw.pdf}}
+\caption{First 10 Legendre polynomials.}
+\label{fig:legendre}
+\end{figure}
+
+Orthogonal and complete over $[-1, 1]$
+\begin{equation*}
+\int_{-1}^{1} P_n(x)P_m(x) dx = \frac{2}{2n+1} \delta_{mn}
+\end{equation*}
+where $\delta_{mn}$ is the Kronecker delta.
+
+\subsection{Digital signal processing}
+
+
+
+\subsection{Subsubsection 1} % Sub-sub-section
 
 \lipsum[3] % Dummy text
 
@@ -148,13 +235,13 @@ Dr. Alan \textsc{Blair} % Assessor's Name
 %	MAJOR SECTION 1
 %----------------------------------------------------------------------------------------
 
-\chapter{Content Section} % Major section
+\section{Proposal} % Major section
 
 \lipsum[5] % Dummy text
 
 %------------------------------------------------
 
-\section{Subsection 1} % Sub-section
+\subsection{Subsection 1} % Sub-section
 
 \subsubsection{Subsubsection 1} % Sub-sub-section
 
@@ -194,15 +281,15 @@ Dr. Alan \textsc{Blair} % Assessor's Name
 %	MAJOR SECTION X - TEMPLATE - UNCOMMENT AND FILL IN
 %----------------------------------------------------------------------------------------
 
-%\chapter{Content Section}
+%\section{Content Section}
 
-%\section{Subsection 1} % Sub-section
+%\subsection{Subsection 1} % Sub-section
 
 % Content
 
 %------------------------------------------------
 
-%\section{Subsection 2} % Sub-section
+%\subsection{Subsection 2} % Sub-section
 
 % Content
 
@@ -210,7 +297,7 @@ Dr. Alan \textsc{Blair} % Assessor's Name
 %	CONCLUSION
 %----------------------------------------------------------------------------------------
 
-\chapter{Conclusion} % Major section
+\section{Conclusion} % Major section
 
 \lipsum[12-13]
 
@@ -218,7 +305,6 @@ Dr. Alan \textsc{Blair} % Assessor's Name
 %	BIBLIOGRAPHY
 %----------------------------------------------------------------------------------------
 
-\bibliographystyle{plain}
 \bibliography{../bibliography}
 
 %----------------------------------------------------------------------------------------
@@ -227,7 +313,7 @@ Dr. Alan \textsc{Blair} % Assessor's Name
 
 \appendix
 
-\chapter{Code}
+\section{Code}
 
 %----------------------------------------------------------------------------------------
 %	INDEX
