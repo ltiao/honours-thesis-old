@@ -29,7 +29,20 @@
 \usepackage{lipsum} % Used for inserting dummy 'Lorem ipsum' text into the template
 
 \usepackage{amsmath}
+
 \usepackage{amsthm}
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{corollary}{Corollary}[theorem]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}[section]
+
+\theoremstyle{remark}
+\newtheorem*{remark}{Remark}
+
 \usepackage{amssymb}
 
 \usepackage{epigraph}
@@ -97,7 +110,7 @@ Louis \textsc{Tiao} % Your name
 \begin{minipage}[t]{0.5\textwidth}
 \begin{flushright} \large
 \emph{Supervisor:} \\
-Dr. Aleksandar \textsc{Ignjatovic} % Supervisor's Name
+Dr. Aleksandar \textsc{Ignjatovi\'{c}} % Supervisor's Name
 \\[0.5cm]
 \emph{Assessor:} \\
 Dr. Alan \textsc{Blair} % Assessor's Name
@@ -126,63 +139,24 @@ Dr. Alan \textsc{Blair} % Assessor's Name
 
 \section{Introduction} % Major section
 
-In \citep{Ignjatovic2009}
-\the \columnwidth
+It is no overstatement that the Nyquist-Shannon Sampling theorem~\footnote{Also known as 
+your face} is indispensable to the fields of communication and signal processing. It allows 
+us to convert continuous real-world analog signals into discrete signals, represented as a 
+sequence a numbers, to then be processed and manipulated digitally on a computer. In this
+manner, it makes the theory and application of digital signal processing possible.
 
+It is no overstatement that the field of digital signal processing is built upon the
+foundation of the Shannon-Whittaker interpolation, the Nyquist-Shannon Samping theorem
+being the chief cornerstone. 
 
-\subsection{Image processing applications}
-
-\subsubsection{Padding for neighborhood operations}
-
-A linear filter is a type of \emph{neighborhood operator} that uses a weighted 
-combination of the pixel values in the vicinity of a given pixel to determine 
-its final output value~\cite[p.~111]{Szeliski2011}.
-
-Denote $f(i, j)$ the pixel value and let $h(k, l)$ be the \emph{convolution 
-matrix} or \emph{kernel}. The \emph{convolution} between $f$ and $h$ is given by
-\begin{align} \label{eq:linear_filter_convolution}
-	g(i, j) = [f \ast h](i, j) 	&= \sum_k \sum_l f(i-k, j-l) \cdot h(k, l) \\
-								&= \sum_k \sum_l f(k, l) \cdot h(i-k, j-l)  \nonumber
-\end{align}
-
-The linear filter can be used to create a wide range of effects, such as adding 
-soft blurs, sharpening details, accentuating edges, etc.
-
-One obvious problem that arises is that at the border of the image, the 
-convolution operation requires pixel values that are outside the boundaries
-of the image.
-
-Let $\tilde{f}(i, j)$ be the padded pixel values. We can define it as a function 
-of the original pixel values $f(k, l)$ and the dimension (height, width) of the 
-image $(M, N)$.
-
-\begin{align*}
-  \tilde{f}(i, j) &= f(k, l), \\
-  k               &= \max(0, \min(M-1, i)), \\
-  l               &= \max(0, \min(N-1, j)).
-\end{align*}
-
-We would like to approximate $\tilde{f}(i, j)$ \dots
-
-\citet[see][p.~114-115]{Szeliski2011} provides 
-
-\subsubsection{Digital image inpainting}
+The \emph{Chromatic derivatives} were introduced by Dr.~Ignjatovi\'{c} and emerged in the 
+design of a switching amplifier. 
 
 \newpage
 
 \section{Background}
 
 \subsection{Preliminaries}
-
-\epigraph{In mathematics you don't understand things. You just get used to them.}{John von Neumann}
-
-\subsubsection{Taylor series}
-
-\subsubsection{Orthogonal systems}
- 
-\subsubsection{Fourier series}
-
-\subsubsection{Legendre Polynomials}
 
 The \emph{Legendre functions} are solutions to the \emph{Legendre differential 
 equation}, which is the second-order ordinary differential equation
@@ -192,7 +166,7 @@ equation}, which is the second-order ordinary differential equation
 \end{equation}
 
 The \emph{Legendre polynomials} are also known as \emph{Legendre functions of the 
-first kind}, and are most conveniently defined recursively as follows:
+first kind}, and sastisfy the following recurrence relation:
 
 \begin{align*}
 P_0(x) &= 1, P_1(x) = x \\
@@ -205,15 +179,97 @@ P_{n+1}(x) &= \frac{2n+1}{n+1}xP_n(x) - \frac{n}{n+1}P_{n-1}(x)
 \label{fig:legendre}
 \end{figure}
 
-Orthogonal and complete over $[-1, 1]$
+The Legendre polynomials are orthogonal over the closed interval 
+$[-1, 1]$
 \begin{equation*}
 \int_{-1}^{1} P_n(x)P_m(x) dx = \frac{2}{2n+1} \delta_{mn}
 \end{equation*}
-where $\delta_{mn}$ is the Kronecker delta.
-
-\subsection{Digital signal processing}
+where $\delta_{mn}$ is the Kronecker delta.\cite{Weisstein}
 
 
+\begin{figure}[H] % Example image
+\center{\includegraphics{legendre_normalized.pdf}}
+\caption{First 10 Legendre polynomials.}
+\label{fig:legendre_normal}
+\end{figure}
+
+\subsection{Chromatic derivatives}
+
+\subsection{Image processing applications}
+
+\subsubsection{Padding for neighborhood operations}
+
+A linear filter is a type of \emph{neighborhood operator} that uses a weighted 
+combination of the pixel values in the vicinity of a given pixel to determine 
+its final output value.
+
+Denote $f(i, j)$ the original pixel value and let $h(k, l)$ be the 
+\emph{convolution matrix} or \emph{kernel}. The \emph{convolution} between 
+$f$ and $h$ is given by
+\begin{align} \label{eq:linear_filter_convolution}
+  g(i, j) = [f \ast h](i, j)  &= \sum_k \sum_l f(i-k, j-l) \cdot h(k, l) \\
+                &= \sum_k \sum_l f(k, l) \cdot h(i-k, j-l)  \nonumber
+\end{align}
+
+The linear filter is commonly used to create a wide range of effects, 
+such as adding  soft blurs, sharpening details, accentuating edges, etc.
+
+Note that the summations defined \cref{eq:linear_filter_convolution} is over
+all values of $k$ and $l$. This is because the values of $f$ and $h$ will usually
+be 0 for values outside of a defined region. For an image of dimensions, (i.e.
+height and width respectively) $M$ and $N$, for all $i<0$ or $i \geq M$ and $j<0$ 
+or $j \geq N, f(i,j)=0$. Similarly, if a kernel $h$ is of size $(K, K)$, then for
+all $|k|>K$ or $|l|>K, h(k,l)=0$.  
+
+One obvious problem that arises is that the convolution operation requires 
+pixel values that are outside the boundaries of the image. By default these
+values would be padded by zero which basically corresponds to a black frame
+surrounding the image. Several alternative approaches are taken, such 
+as
+
+\begin{description}
+  \item[constant] set all pixel values outside the border to some constant value
+  \item[clamp] replicate the edge pixels indefinitely
+  \item[wrap] repeat/tile the image indefinitely
+  \item[mirror] reflect pixels across image border
+  \item[crop] ignore the positions which would require pixel values outside the border,
+    effectively cropping the image by $K$ on each side of the image.
+\end{description}
+
+Please consult \citet[p.~111-115]{Szeliski2011} for an extended discussion
+of linear filters and the various padding modes employed in practice. 
+
+Most of these modes can be formulated mathematically 
+\cite[see][p.~114-115]{Szeliski2011}. For example, the clamp mode can be expressed 
+as follows. Let $\tilde{f}(i, j)$ be \emph{extended} pixel values, defined for all 
+$i, j$. We can express it as a function of the original pixel values $f(k, l)$ and the 
+dimensions (height, width) of the image $(M, N)$.
+\begin{align*}
+  \tilde{f}(i, j) &= f(k, l), \\
+  k               &= \max(0, \min(M-1, i)), \\
+  l               &= \max(0, \min(N-1, j)).
+\end{align*}
+
+We would like to approximate $\tilde{f}(i, j)$ \dots
+
+
+\subsubsection{Digital image inpainting}
+
+Inpainting is the process of reconstructing of lost or deteriorated parts of an image. It 
+can also be used to refill the void left from removing undesirable objects from the image
+in a visually plausible manner. Some applications include alleviating the red-eye effect,
+removal of blemishes, text, etc. It can also be used for the restoration
+of art and photographs.
+
+\begin{figure}[H]
+\centering
+  \includegraphics[width=0.45\columnwidth]{../figures/researchmicros-000.jpg}
+  \hfill
+  \includegraphics[width=0.45\columnwidth]{../figures/researchmicros-001.jpg}
+\caption{Removing large objects from images (image obtained from \cite{Criminisi2004})}
+\end{figure}
+
+Traditionally, inpainting is a process undertaken by professional conservator-restorators.
 
 \subsection{Subsubsection 1} % Sub-sub-section
 
@@ -231,19 +287,21 @@ where $\delta_{mn}$ is the Kronecker delta.
 
 \lipsum[4] % Dummy text
 
+\subsection{Literature review}
+
 %----------------------------------------------------------------------------------------
 %	MAJOR SECTION 1
 %----------------------------------------------------------------------------------------
 
-\section{Proposal} % Major section
+\section{Research Proposal} % Major section
 
 \lipsum[5] % Dummy text
 
 %------------------------------------------------
 
-\subsection{Subsection 1} % Sub-section
+\subsection{Methodology} % Sub-section
 
-\subsubsection{Subsubsection 1} % Sub-sub-section
+\subsubsection{Evaluation framework} % Sub-sub-section
 
 \lipsum[6] % Dummy text
 
@@ -264,6 +322,10 @@ where $\delta_{mn}$ is the Kronecker delta.
 
 \subsubsection{Subsubsection 3} % Sub-sub-section
 
+\subsection{Plan}
+
+\subsection{Timetable}
+
 \begin{description} % Numbered list example
 
 \item[First] \hfill \\
@@ -277,29 +339,6 @@ where $\delta_{mn}$ is the Kronecker delta.
 
 \end{description} 
 
-%----------------------------------------------------------------------------------------
-%	MAJOR SECTION X - TEMPLATE - UNCOMMENT AND FILL IN
-%----------------------------------------------------------------------------------------
-
-%\section{Content Section}
-
-%\subsection{Subsection 1} % Sub-section
-
-% Content
-
-%------------------------------------------------
-
-%\subsection{Subsection 2} % Sub-section
-
-% Content
-
-%----------------------------------------------------------------------------------------
-%	CONCLUSION
-%----------------------------------------------------------------------------------------
-
-\section{Conclusion} % Major section
-
-\lipsum[12-13]
 
 %----------------------------------------------------------------------------------------
 %	BIBLIOGRAPHY
