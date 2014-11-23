@@ -1,37 +1,17 @@
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Simple Sectioned Essay Template
-% LaTeX Template
-%
-% This template has been downloaded from:
-% http://www.latextemplates.com
-%
-% Note:
-% The \lipsum[#] commands throughout this template generate dummy text
-% to fill the template out. These commands should all be removed when 
-% writing essay content.
-%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\documentclass[11pt,oneside]{book}
 
-%----------------------------------------------------------------------------------------
-%	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
-%----------------------------------------------------------------------------------------
+\usepackage[a4paper]{geometry}
 
-\documentclass[11pt]{article} % Default font size is 12pt
+\linespread{1.2} % Line spacing
+
+\setlength\parindent{0pt} % Uncomment to remove all indentation from paragraphs
+\setlength{\parskip}{8pt}
 
 \usepackage[utf8]{inputenc}
 
-\usepackage[a4paper]{geometry} % Required to change the page size to A4
-% Set the page size to be A4 as opposed to the default US Letter
+\usepackage{lipsum}
 
-\usepackage{subcaption} 
-\usepackage{float} % Allows putting an [H] in \begin{figure} to specify the exact location of the figure
-\usepackage{wrapfig} % Allows in-line images such as the example fish picture
-
-\usepackage{lipsum} % Used for inserting dummy 'Lorem ipsum' text into the template
-
-\usepackage{amsmath}
-
-\usepackage{amsthm}
+\usepackage{amsmath,amssymb,amsthm}
 \theoremstyle{plain}
 \newtheorem{theorem}{Theorem}[section]
 \newtheorem{corollary}{Corollary}[theorem]
@@ -44,11 +24,25 @@
 \theoremstyle{remark}
 \newtheorem*{remark}{Remark}
 
-\usepackage{amssymb}
+\usepackage{algpseudocode}
+\usepackage{algorithm}
+\usepackage{listings}
+\usepackage{tikz}
+
+\usepackage{subcaption} 
+\usepackage{float}
+\usepackage{wrapfig}
+\usepackage{graphicx}
+\graphicspath{{../figures/}}
+
+\usepackage{multirow}
+\usepackage{booktabs}
+\usepackage{array}
 
 \usepackage{dsfont}
-
-\usepackage{epigraph}
+\usepackage{epstopdf}
+\usepackage{siunitx}
+\usepackage{todonotes}
 
 \usepackage[numbers, sort]{natbib}
 \bibliographystyle{plainnat}
@@ -58,15 +52,7 @@
 \usepackage{makeidx}
 \makeindex
 
-\linespread{1.2} % Line spacing
-
-\setlength\parindent{0pt} % Uncomment to remove all indentation from paragraphs
-\setlength{\parskip}{8pt}
-
-\usepackage{graphicx} % Required for including pictures
-\graphicspath{{../figures/}} % Specifies the directory where pictures are stored
-
-\usepackage{epstopdf}
+\usepackage{url}
 
 \usepackage{hyperref}
 \hypersetup{
@@ -77,12 +63,8 @@
     urlcolor=black
 }
 
-\usepackage{microtype}
-\usepackage{siunitx}
 \usepackage{cleveref}
-\usepackage{booktabs}
-
-\usepackage{todonotes}
+\usepackage{microtype}
 
 \begin{document}
 
@@ -131,19 +113,38 @@ Dr. Alan \textsc{Blair} % Assessor's Name
 
 \end{titlepage}
 
+\newpage 
+
+\thispagestyle{plain}
+
+\topskip0pt
+\vspace*{\stretch{1}}
+\begin{center}
+{\large
+  \emph{Dedicated to memory of my beloved grandfather, \\ 
+  Hai-Xiang Tiao (1918--2014).}
+}  
+\end{center}
+\vspace*{\stretch{3}}
+
+% \par\vspace*{.35\textheight}
+% {\centering \dedicatory{Dedicated to memory of my grandfather, 1918--2014.}\par}
+
+\newpage
+
 %----------------------------------------------------------------------------------------
 %	TABLE OF CONTENTS
 %----------------------------------------------------------------------------------------
 
 \tableofcontents % Include a table of contents
 
-\newpage % Begins the essay on a new page instead of on the same page as the table of contents 
+\newpage
 
 %----------------------------------------------------------------------------------------
 %	INTRODUCTION
 %----------------------------------------------------------------------------------------
 
-\section{Introduction} \label{intro} % Major section
+\chapter{Introduction} \label{intro} % Major section
 
 It is no overstatement that the Nyquist-Shannon sampling theorem
  is indispensable to the fields of communication and signal processing. It 
@@ -151,7 +152,7 @@ allows us to convert continuous real-world analog signals into discrete signals,
 represented as a sequence a numbers, to then be processed and manipulated digitally on a 
 computer - it makes digital signal processing possible, both in theory and in practice.
 
-Let $f$ is a signal of finite energy bandlimited by $B$, i.e. $f$ is a continuous $L^2$ 
+Let $f$ be a signal of finite energy bandlimited by $B$, i.e. $f$ is a continuous $L^2$ 
 function whose Fourier transform has support within $[-B,B]$. We denote the class of
 such functions $\mathbf{BL}(B)$. The interpolation (reconstruction) formula complementary to the 
 sampling theorem, commonly known as the Whittaker–Shannon interpolation formula, is
@@ -249,9 +250,9 @@ multidimensional chromatic derivatives, and roughly outline the plan for carryin
 
 \newpage
 
-\section{Background}
+\chapter{Background}
 
-\subsection{Preliminaries}
+\section{Preliminaries}
 
 The \emph{Legendre functions} are solutions to the \emph{Legendre differential 
 equation}, which is the second-order ordinary differential equation
@@ -305,7 +306,7 @@ with $P_{-1}(x)=0, P_0(x)=1$, and
 \end{equation}
 with $\gamma_{-1} = 1$.
 
-\subsection{Chromatic derivatives}
+\section{Chromatic derivatives}
 
 \subsubsection{Definition} \label{cd_def}
 
@@ -561,7 +562,7 @@ important and useful for processing and analyzing empirically sampled data,
 and promises applications in digital signal processing and related fields 
 such as image processing. 
 
-\subsection{Image processing applications} \label{image_applications}
+\section{Image processing applications} \label{image_applications}
 
 We now consider some problems which chromatic derivatives naturally
 lends itself to, specifically those in the field of image processing. This
@@ -704,9 +705,9 @@ portion of this thesis project. We propose our approach in \cref{proposal}.
 %	MAJOR SECTION 1
 %----------------------------------------------------------------------------------------
 
-\section{Research Proposal} \label{proposal}
+\chapter{Research Proposal} \label{proposal}
 
-\subsection{Approach} \label{approach} % Sub-section
+\section{Approach} \label{approach} % Sub-section
 
 Fourier analysis and other techniques traditionally used in digital signal processing
 can readily be applied to image processing, since images are just signals in the spatial
@@ -749,7 +750,7 @@ mathematical programming problem in this context.
 This roughly outlines the general approach and the problems we foresee at
 the present time.
 
-\subsection{Plan} 
+\section{Plan} 
 
 Here is an outline of the plan:
 
@@ -778,7 +779,7 @@ Here is an outline of the plan:
   for presentation and final thesis report.
 \end{enumerate}
 
-\section{Conclusion}
+\chapter{Conclusion}
 
 In this report, we gave the motivation for the chromatic derivatives
 by demonstrating the shortcomings of Taylor series when processing signals.
